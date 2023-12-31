@@ -17,10 +17,6 @@ jobs:
           - os: linux
             goarch: amd64
           - os: linux
-            goarch: 386
-          - os: linux
-            goarch: arm
-          - os: linux
             goarch: arm64
           - os: darwin
             goarch: amd64
@@ -28,8 +24,6 @@ jobs:
             goarch: arm64
           - os: windows
             goarch: amd64
-          - os: windows
-            goarch: 386
           - os: android
             goarch: arm64
           # ... Add other combinations as needed
