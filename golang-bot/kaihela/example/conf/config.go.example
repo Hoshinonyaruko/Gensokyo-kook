@@ -1,0 +1,17 @@
+package conf
+
+const (
+	// Token BaseUrl: HTTPAPI相关配置，如果只需要收消息，可不填
+	Token   = ""
+	BaseUrl = "https://www.kookapp.cn/api"
+
+	// HTTPServerIp HTTPServerPort  VerifyToken EncryptKey : WEBHOOK相关, 如果不是WEBHOOK,可不填
+	// HTTPServerIp 侦听的ip地址
+	HTTPServerIp = "0.0.0.0"
+	// HTTPServerPort 侦听的端口
+	HTTPServerPort = "8080"
+	// VerifyToken 若不需要verify, 可不填。填上可以防止别人填你的地址，导致你的消息混乱。
+	VerifyToken = ""
+	// EncryptKey 若不需要加密，可不填。如果有encryptKey会更安全一点。
+	EncryptKey = ""
+)
