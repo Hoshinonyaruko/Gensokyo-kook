@@ -390,7 +390,7 @@ type GroupTextEventHandler struct {
 }
 
 func (gteh *GroupTextEventHandler) Handle(e event.Event) error {
-	mylog.Printf("event: %+v, 收到频道内的文字消息.", e.Data())
+	mylog.Printf("bot[%v]event: %+v, 收到频道内的文字消息.", handlers.BotID, e.Data())
 
 	err := func() error {
 		if _, ok := e.Data()[base.EventDataFrameKey]; !ok {
@@ -438,7 +438,7 @@ type PersonTextEventHandler struct {
 }
 
 func (gteh *PersonTextEventHandler) Handle(e event.Event) error {
-	mylog.Printf("event: %+v, 收到私信内的文字消息.", e.Data())
+	mylog.Printf("bot[%v]event: %+v, 收到私信内的文字消息.", handlers.BotID, e.Data())
 	err := func() error {
 		if _, ok := e.Data()[base.EventDataFrameKey]; !ok {
 			mylog.Errorf("data has no frame field")
