@@ -34,8 +34,8 @@ settings:
   reconnect_times : 100             #反向ws连接失败后的重试次数,希望一直重试,可设置9999
   heart_beat_interval : 10          #反向ws心跳间隔 单位秒 推荐5-10
   launch_reconnect_times : 1        #启动时尝试反向ws连接次数,建议先打开应用端再开启gensokyo-kook,因为启动时连接会阻塞webui启动,默认只连接一次,可自行增大
-  native_ob11 : false               #如果你的机器人收到事件报错,请开启此选项增加兼容性
-  ob11_int32 : false                     #部分不支持group_id是int64的应用端,将int64转换为更短的int32
+  native_ob11 : true               #如果你的机器人收到事件报错,请开启此选项增加兼容性
+  ob11_int32 : true                     #部分不支持group_id是int64的应用端,将int64转换为更短的int32
   self_introduce : ["",""]          #自我介绍,可设置多个随机发送,当不为空时,机器人被邀入群会发送自定义自我介绍 需手动添加新textintent   - "GroupAddRobotEventHandler"   - "GroupDelRobotEventHandler"
 
   #正向ws设置
