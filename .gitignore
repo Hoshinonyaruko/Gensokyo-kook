@@ -4,6 +4,7 @@ config.yml
 *.db.lock
 *.ini
 *.bat
+session.pid
 
 # Go specific
 gensokyo-kook.exe
