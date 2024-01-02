@@ -233,6 +233,8 @@ func UploadImage(filePath, token string, baseurl string) (string, error) {
 
 // UploadImageBase64 函数上传Base64编码的图片并返回图片URL
 func UploadImageBase64(base64String, token string, baseurl string) (string, error) {
+	// 替换所有空格为加号
+	base64String = strings.ReplaceAll(base64String, " ", "+")
 	// 解码Base64字符串
 	decodedData, err := base64.StdEncoding.DecodeString(base64String)
 	if err != nil {
