@@ -1638,3 +1638,14 @@ func GetIgnoreBotMessage() bool {
 	}
 	return instance.Settings.IgnoreBotMessage
 }
+
+func GetGlobalChannelToGroup() bool {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if instance == nil {
+		mylog.Println("Warning: instance is nil when trying to GlobalChannelToGroup value.")
+		return false
+	}
+	return instance.Settings.GlobalChannelToGroup
+}

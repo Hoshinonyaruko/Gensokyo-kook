@@ -26,8 +26,13 @@ func HandleSendGuildChannelMsg(client callapi.Client, Token string, BaseUrl stri
 		msgType = GetMessageTypeByUseridV2(message.Params.UserID)
 	}
 
-	//当不转换频道信息时(不支持频道私聊)
+	//当直接调用send_guild_channel_msg时
 	if msgType == "" {
+		msgType = "guild"
+	}
+
+	//当不转换channel到group时
+	if !config.GetGlobalChannelToGroup() {
 		msgType = "guild"
 	}
 	switch msgType {
@@ -37,13 +42,18 @@ func HandleSendGuildChannelMsg(client callapi.Client, Token string, BaseUrl stri
 		var channelID string
 		var err error
 		messageText, foundItems := parseMessageContent(params, message, client, Token, BaseUrl)
-		if config.GetOb11Int32() {
+		//ob11转int 且 频道转换为群 时 才需要还原int为int的target_id (gocq标准onebotv11频道事件本身就是string)
+		if config.GetOb11Int32() && config.GetGlobalChannelToGroup() {
 			channelID, err = idmap.RetrieveRowByIDv2(message.Params.GroupID.(string))
 			if err != nil {
 				mylog.Printf("GetOb11Int32还原id时出错 %v", err)
 			}
 		} else {
 			channelID = message.Params.GroupID.(string)
+		}
+
+		if !config.GetGlobalChannelToGroup() {
+			channelID = message.Params.ChannelID
 		}
 
 		mylog.Println("频道发信息messageText:", messageText)
