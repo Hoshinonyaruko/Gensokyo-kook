@@ -33,6 +33,11 @@ func HandleSendGroupMsg(client callapi.Client, Token string, BaseUrl string, mes
 		msgType = GetMessageTypeByUseridV2(message.Params.UserID)
 	}
 
+	//兜底防止死循环
+	if msgType == "" {
+		msgType = "guild"
+	}
+
 	mylog.Printf("send_group_msg获取到信息类型:%v", msgType)
 	var idInt64 int64
 	var err error
