@@ -162,7 +162,7 @@ func (p *Processors) ProcessChannelDirectMessage(data *event.MessageKMarkdownEve
 					Level:    "0",
 				},
 				SubType: "channel",
-				Time:    data.MsgTimestamp,
+				Time:    time.Now().Unix(),
 				Avatar:  data.Author.Avatar,
 			}
 			// 获取MasterID数组

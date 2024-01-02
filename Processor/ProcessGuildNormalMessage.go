@@ -64,7 +64,7 @@ func (p *Processors) ProcessGuildNormalMessage(data *event.MessageKMarkdownEvent
 				Level:    "0",
 			},
 			SubType: "channel",
-			Time:    data.MsgTimestamp,
+			Time:    time.Now().Unix(),
 			Avatar:  data.Author.Avatar,
 		}
 
