@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"encoding/base64"
+	"io"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -155,6 +158,8 @@ func generateKaiheilaMessage(foundItems map[string][]string, messageText string,
 		}
 	} else if imageURLs, ok := foundItems["url_image"]; ok && len(imageURLs) > 0 {
 		newpiclink := "http://" + imageURLs[0]
+		//转换开黑啦img url
+		newpiclink, _ = uploadImageAndGetNewLink(newpiclink, Token, BaseUrl)
 		// 发链接图片
 		return &Card{
 			Type:  "card",
@@ -174,6 +179,8 @@ func generateKaiheilaMessage(foundItems map[string][]string, messageText string,
 		}
 	} else if imageURLs, ok := foundItems["url_images"]; ok && len(imageURLs) > 0 {
 		newpiclink := "https://" + imageURLs[0]
+		//转换开黑啦img url
+		newpiclink, _ = uploadImageAndGetNewLink(newpiclink, Token, BaseUrl)
 		// 发链接图片
 		return &Card{
 			Type:  "card",
@@ -328,4 +335,33 @@ func GetMessageTypeByGroupidV2(GroupID interface{}) string {
 	// 	//mylog.Printf("GetMessageTypeByGroupidV2失败:%v", err)
 	// }
 	return msgtype
+}
+
+func downloadImage(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	return io.ReadAll(resp.Body)
+}
+
+func uploadImageAndGetNewLink(imageURL string, token string, baseUrl string) (string, error) {
+	// 下载图片
+	imageData, err := downloadImage(imageURL)
+	if err != nil {
+		return "", err
+	}
+
+	// 将图片数据转换为base64
+	base64Image := base64.StdEncoding.EncodeToString(imageData)
+
+	// 上传图片并获取新链接
+	newURL, err := images.UploadImageBase64(base64Image, token, baseUrl)
+	if err != nil {
+		return "", err
+	}
+
+	return newURL, nil
 }
