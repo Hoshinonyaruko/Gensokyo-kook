@@ -22,25 +22,12 @@ func (p *Processors) ProcessChannelDirectMessage(data *event.MessageKMarkdownEve
 	//PrintStructWithFieldNames(data)
 
 	var userid64 int64
-	var ChannelID64 int64
+
 	var err error
 	userid64, err = strconv.ParseInt(data.Author.ID, 10, 64)
 	if err != nil {
 		mylog.Printf("Error ParseInt userid64 127: %v", err)
 		return nil
-	}
-	if config.GetOb11Int32() {
-		ChannelID64, err = idmap.StoreIDv2(data.TargetId)
-		if err != nil {
-			mylog.Printf("Error ParseInt ChannelID64 136: %v", err)
-			return nil
-		}
-	} else {
-		ChannelID64, err = strconv.ParseInt(data.TargetId, 10, 64)
-		if err != nil {
-			mylog.Printf("Error ParseInt ChannelID64 128: %v", err)
-			return nil
-		}
 	}
 
 	//获取当前的s值 当前ws连接所收到的信息条数
@@ -276,7 +263,7 @@ func (p *Processors) ProcessChannelDirectMessage(data *event.MessageKMarkdownEve
 			}
 
 			//储存当前群或频道号的类型
-			idmap.WriteConfigv2(fmt.Sprint(ChannelID64), "type", "guild_private")
+			idmap.WriteConfigv2(fmt.Sprint(userid64), "type", "guild_private")
 
 			//调试
 			PrintStructWithFieldNames(groupMsg)
