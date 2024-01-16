@@ -5,10 +5,8 @@ import (
 	"io"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/hoshinonyaruko/gensokyo-kook/callapi"
-	"github.com/hoshinonyaruko/gensokyo-kook/config"
 	"github.com/hoshinonyaruko/gensokyo-kook/echo"
 	"github.com/hoshinonyaruko/gensokyo-kook/idmap"
 	"github.com/hoshinonyaruko/gensokyo-kook/images"
@@ -42,29 +40,8 @@ func HandleSendGroupMsg(client callapi.Client, Token string, BaseUrl string, mes
 	}
 
 	mylog.Printf("send_group_msg获取到信息类型:%v", msgType)
-	var idInt64 int64
-	var err error
+
 	var retmsg string
-
-	if message.Params.GroupID != "" {
-		idInt64, err = ConvertToInt64(message.Params.GroupID)
-	} else if message.Params.UserID != "" {
-		idInt64, err = ConvertToInt64(message.Params.UserID)
-	}
-
-	//设置递归 对直接向gsk发送action时有效果
-	if msgType == "" {
-		messageCopy := message
-		if err != nil {
-			mylog.Printf("错误：无法转换 ID %v\n", err)
-		} else {
-			// 递归3次
-			echo.AddMapping(idInt64, 4)
-			// 递归调用handleSendGroupMsg，使用设置的消息类型
-			echo.AddMsgType(config.GetAppIDStr(), idInt64, "group_private")
-			retmsg, _ = HandleSendGroupMsg(client, Token, BaseUrl, messageCopy)
-		}
-	}
 
 	switch msgType {
 	case "guild":
@@ -74,21 +51,7 @@ func HandleSendGroupMsg(client callapi.Client, Token string, BaseUrl string, mes
 	default:
 		mylog.Printf("Unknown message type: %s", msgType)
 	}
-	//重置递归类型
-	if echo.GetMapping(idInt64) <= 0 {
-		echo.AddMsgType(config.GetAppIDStr(), idInt64, "")
-	}
-	echo.AddMapping(idInt64, echo.GetMapping(idInt64)-1)
 
-	//递归3次枚举类型
-	if echo.GetMapping(idInt64) > 0 {
-		tryMessageTypes := []string{"group", "guild", "guild_private"}
-		messageCopy := message // 创建message的副本
-		echo.AddMsgType(config.GetAppIDStr(), idInt64, tryMessageTypes[echo.GetMapping(idInt64)-1])
-		delay := config.GetSendDelay()
-		time.Sleep(time.Duration(delay) * time.Millisecond)
-		HandleSendGroupMsg(client, Token, BaseUrl, messageCopy)
-	}
 	return retmsg, nil
 }
 
