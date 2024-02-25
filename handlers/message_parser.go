@@ -213,7 +213,7 @@ func isIPAddress(address string) bool {
 // at处理
 func transformMessageTextAt(messageText string) string {
 
-	// 去除所有[CQ:reply,id=数字] todo 更好的处理办法
+	// 去除所有[CQ:reply,id=数字]
 	replyRE := regexp.MustCompile(`\[CQ:reply,id=\d+\]`)
 	messageText = replyRE.ReplaceAllString(messageText, "")
 
@@ -226,7 +226,7 @@ func transformMessageTextAt(messageText string) string {
 			if err != nil {
 				// 如果出错，也替换成相应的格式，但使用原始QQ号
 				mylog.Printf("Error retrieving user ID: %v", err)
-				return "<@!" + submatches[1] + ">"
+				return "(met)" + submatches[1] + "(met)"
 			}
 
 			// 在这里检查 GetRemoveBotAtGroup 和 realUserID 的长度
@@ -234,7 +234,7 @@ func transformMessageTextAt(messageText string) string {
 				return ""
 			}
 
-			return "<@!" + realUserID + ">"
+			return "(met)" + realUserID + "(met)"
 		}
 		return m
 	})
@@ -325,8 +325,8 @@ func RevertTransformedText(data interface{}, msgtype string, Token string, BaseU
 	}
 	//mylog.Printf("1[%v]", messageText)
 
-	// 使用正则表达式来查找所有<@!数字>的模式
-	re := regexp.MustCompile(`<@!(\d+)>`)
+	// 使用正则表达式来查找所有(met)数字(met)的模式
+	re := regexp.MustCompile(`\(met\)(\d+)\(met\)`)
 	// 使用正则表达式来替换找到的模式为[CQ:at,qq=用户ID]
 	messageText = re.ReplaceAllStringFunc(messageText, func(m string) string {
 		submatches := re.FindStringSubmatch(m)
@@ -347,6 +347,7 @@ func RevertTransformedText(data interface{}, msgtype string, Token string, BaseU
 		}
 		return m
 	})
+
 	//结构 <@!>空格/内容
 	//如果移除了前部at,信息就会以空格开头,因为只移去了最前面的at,但at后紧跟随一个空格
 	if config.GetRemoveAt() {
