@@ -135,8 +135,10 @@ func main() {
 		if !nologin {
 			if configURL == "" { //初始化handlers
 				handlers.BotID = response.Data.ID
+				config.BotID = response.Data.ID
 			} else { //初始化handlers
 				handlers.BotID = config.GetDevBotid()
+				config.BotID = response.Data.ID
 			}
 			botID64, err := strconv.ParseUint(handlers.BotID, 10, 64)
 
@@ -278,10 +280,10 @@ func main() {
 	r.POST("/url", url.CreateShortURLHandler)
 	r.GET("/url/:shortURL", url.RedirectFromShortURLHandler)
 	if config.GetIdentifyFile() {
-		appIDStr := config.GetAppIDStr()
+		appIDStr := config.BotID
 		fileName := appIDStr + ".json"
 		r.GET("/"+fileName, func(c *gin.Context) {
-			content := fmt.Sprintf(`{"bot_appid":%d}`, config.GetAppID())
+			content := fmt.Sprintf(`{"bot_appid":%d}`, config.BotID)
 			c.Header("Content-Type", "application/json")
 			c.String(200, content)
 		})

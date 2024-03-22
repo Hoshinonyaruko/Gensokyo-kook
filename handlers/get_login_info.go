@@ -32,7 +32,7 @@ func GetLoginInfo(client callapi.Client, Token string, BaseUrl string, message c
 	var botname string
 
 	// Assuming 全局_botid is a global or environment variable
-	globalBotID := config.GetAppID() // Replace with the actual global variable or value
+	globalBotID := config.BotID // Replace with the actual global variable or value
 	userIDStr := fmt.Sprintf("%d", globalBotID)
 	botname = config.GetCustomBotName()
 
