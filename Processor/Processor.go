@@ -304,7 +304,7 @@ func PostMessageToUrls(message map[string]interface{}) {
 			// 设置请求头
 			req.Header.Set("Content-Type", "application/json")
 			// 设置 X-Self-ID
-			selfid := config.GetAppIDStr()
+			selfid := config.BotID
 			req.Header.Set("X-Self-ID", selfid)
 
 			// 发送请求

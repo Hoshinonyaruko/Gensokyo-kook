@@ -59,7 +59,7 @@ func GetLazyMessagesId(groupID string) string {
 		randomIndex := rand.Intn(len(recentMessages))
 		randomMessageID = recentMessages[randomIndex]
 	} else {
-		msgType := GetMessageTypeByGroupidv2(config.GetAppIDStr(), groupID)
+		msgType := GetMessageTypeByGroupidv2(config.BotID, groupID)
 		if strings.HasPrefix(msgType, "guild") {
 			randomMessageID = "1000" // 频道主动信息
 		} else {

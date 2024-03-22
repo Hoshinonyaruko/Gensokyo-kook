@@ -92,7 +92,7 @@ func wsHandler(Token string, BaseUrl string, p *Processor.Processors, c *gin.Con
 	p.WsServerClients = append(p.WsServerClients, client)
 
 	// 获取botID
-	botID := config.GetAppID()
+	botID := config.BotID
 
 	// 发送连接成功的消息
 	message := map[string]interface{}{
