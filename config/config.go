@@ -19,6 +19,7 @@ import (
 var (
 	instance *Config
 	mu       sync.Mutex
+	BotID    string
 )
 
 type Config struct {
@@ -630,26 +631,6 @@ func GetArrayValue() bool {
 		return false
 	}
 	return instance.Settings.Array
-}
-
-// 获取AppID
-func GetAppID() uint64 {
-	mu.Lock()
-	defer mu.Unlock()
-	if instance != nil {
-		return instance.Settings.AppID
-	}
-	return 0 // or whatever default value you'd like to return if instance is nil
-}
-
-// 获取AppID String
-func GetAppIDStr() string {
-	mu.Lock()
-	defer mu.Unlock()
-	if instance != nil {
-		return fmt.Sprintf("%d", instance.Settings.AppID)
-	}
-	return "0"
 }
 
 // 获取WsToken

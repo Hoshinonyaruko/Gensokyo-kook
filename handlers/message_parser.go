@@ -332,7 +332,13 @@ func RevertTransformedText(data interface{}, msgtype string, Token string, BaseU
 		submatches := re.FindStringSubmatch(m)
 		if len(submatches) > 1 {
 			userID := submatches[1]
-
+			if userID == BotID {
+				if config.GetRemoveAt() {
+					return ""
+				} else {
+					return "[CQ:at,qq=" + BotID + "]"
+				}
+			}
 			// 不是 BotID，进行正常映射
 			userID64, err := idmap.StoreIDv2(userID)
 			if err != nil {
