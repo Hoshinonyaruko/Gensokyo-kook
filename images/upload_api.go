@@ -266,6 +266,41 @@ func UploadImageBase64(base64String, token string, baseurl string) (string, erro
 	return response.Data.URL, nil
 }
 
+// UploadRecordBase64 函数上传Base64编码的音频并返回URL
+func UploadRecordBase64(base64String, token string, baseurl string) (string, error) {
+	// 替换所有空格为加号
+	base64String = strings.ReplaceAll(base64String, " ", "+")
+	// 解码Base64字符串
+	decodedData, err := base64.StdEncoding.DecodeString(base64String)
+	if err != nil {
+		return "", err
+	}
+
+	// 生成随机文件名
+	randomFileName := "temp_" + RandomString(10) + ".wav"
+
+	// 创建ApiHelper实例
+	apiHelper := helper.NewApiHelper("/v3/asset/create", token, baseurl, "", "")
+
+	// 添加文件到ApiHelper
+	apiHelper.AddFile("file", randomFileName, decodedData)
+
+	// 执行POST请求
+	responseBody, err := apiHelper.Post()
+	if err != nil {
+		return "", err
+	}
+
+	// 解析响应JSON以获取URL
+	var response ImageUploadResponse
+	err = json.Unmarshal(responseBody, &response)
+	if err != nil {
+		return "", err
+	}
+
+	return response.Data.URL, nil
+}
+
 // RandomString 生成指定长度的随机字符串
 func RandomString(length int) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
