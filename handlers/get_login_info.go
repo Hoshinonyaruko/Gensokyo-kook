@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
+	"strconv"
 
 	"github.com/hoshinonyaruko/gensokyo-kook/callapi"
 	"github.com/hoshinonyaruko/gensokyo-kook/config"
@@ -19,7 +19,7 @@ type LoginInfoResponse struct {
 
 type LoginInfoData struct {
 	Nickname string `json:"nickname"`
-	UserID   string `json:"user_id"` // Assuming UserID is a string type based on the pseudocode
+	UserID   int64  `json:"user_id"` // Assuming UserID is a string type based on the pseudocode
 }
 
 func init() {
@@ -33,12 +33,12 @@ func GetLoginInfo(client callapi.Client, Token string, BaseUrl string, message c
 
 	// Assuming 全局_botid is a global or environment variable
 	globalBotID := config.BotID // Replace with the actual global variable or value
-	userIDStr := fmt.Sprintf("%d", globalBotID)
+	globalBotID64, _ := strconv.ParseInt(globalBotID, 10, 64)
 	botname = config.GetCustomBotName()
 
 	response.Data = LoginInfoData{
 		Nickname: botname,
-		UserID:   userIDStr,
+		UserID:   globalBotID64,
 	}
 	response.Message = ""
 	response.RetCode = 0
