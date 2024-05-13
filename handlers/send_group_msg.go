@@ -70,6 +70,7 @@ type Module struct {
 	Type     string    `json:"type"`
 	Elements []Element `json:"elements,omitempty"`
 	Text     *Text     `json:"text,omitempty"`
+	Src      string    `json:"src,omitempty"`
 }
 
 type Card struct {
@@ -187,6 +188,24 @@ func generateKaiheilaMessage(foundItems map[string][]string, messageText string,
 							Src:  imageURL,
 						},
 					},
+				},
+			},
+		}
+	} else if base64Record, ok := foundItems["base64_record"]; ok && len(base64Record) > 0 {
+		recordURL, err := images.UploadRecordBase64(base64Record[0], Token, BaseUrl)
+		if err != nil {
+			mylog.Printf("failed to upload base64 audio: %v", err)
+			return nil
+		}
+		// 发链接图片
+		return &Card{
+			Type:  "card",
+			Theme: "secondary",
+			Size:  "lg",
+			Modules: []Module{
+				{
+					Type: "audio",
+					Src:  recordURL,
 				},
 			},
 		}
