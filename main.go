@@ -85,6 +85,24 @@ func main() {
 		os.Exit(0)
 	}
 
+	// 启动一个goroutine定期重启应用
+	go func() {
+		for {
+			// 获取重启间隔
+			restartTime := config.GetRestartTime()
+			if restartTime <= 0 {
+				log.Println("Invalid restart time. Exiting routine...")
+				return
+			}
+
+			// 等待指定的时间
+			time.Sleep(time.Duration(restartTime) * time.Second)
+
+			// 调用重启函数
+			sys.RestartApplication()
+		}
+	}()
+
 	// 主逻辑
 	// 加载配置
 	conf, err := config.LoadConfig("config.yml")

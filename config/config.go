@@ -43,6 +43,7 @@ type Settings struct {
 	Server_dir             string               `yaml:"server_dir"`
 	Lotus                  bool                 `yaml:"lotus"`
 	Port                   string               `yaml:"port"`
+	RestartTime            int                  `yaml:"restart_time"`
 	WsToken                []string             `yaml:"ws_token,omitempty"`         // 连接wss时使用,不是wss可留空 一一对应
 	MasterID               []string             `yaml:"master_id,omitempty"`        // 如果需要在群权限判断是管理员是,将user_id填入这里,master_id是一个文本数组
 	EnableWsServer         bool                 `yaml:"enable_ws_server,omitempty"` //正向ws开关
@@ -1420,6 +1421,18 @@ func GetOssType() int {
 		return 0
 	}
 	return instance.Settings.OssType
+}
+
+// 获取 RestartTime 模式
+func GetRestartTime() int {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if instance == nil {
+		mylog.Println("Warning: instance is nil when trying to get RestartTime version.")
+		return 0
+	}
+	return instance.Settings.RestartTime
 }
 
 // 获取BaiduBOSBucketName
