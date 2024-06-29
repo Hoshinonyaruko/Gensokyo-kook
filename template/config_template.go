@@ -8,6 +8,7 @@ settings:
   ws_token : ["","",""]              #连接wss地址时服务器所需的token,按顺序一一对应,如果是ws地址,没有密钥,请留空.
   token : "<YOUR_APP_TOKEN>"                          # 你的应用令牌
   kaiheila_api : "https://www.kookapp.cn/api"         #api地址
+  restart_time : 86400                               #每天自己重启自己一下,kook总是断线.仅支持win,linux请修改为0.
 
   global_channel_to_group: true                      # 是否将频道转换成群 默认true
   global_private_to_channel: false                   # 是否将私聊转换成频道 如果是群场景 会将私聊转为群(方便提审\测试)
